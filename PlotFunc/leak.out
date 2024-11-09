@@ -1,0 +1,29 @@
+# LeakReport
+# from new @ |      size  # Pointer Addr
+L   0x40b96a         576  # 0x8afe70
+L   0x40b96a           4  # 0x8d5260
+L   0x40b96a        2048  # 0x8b00c0
+L   0x40b96a        2048  # 0x8d61b0
+L   0x40b96a        2048  # 0x8d5590
+L   0x40b96a           4  # 0x8d7220
+L   0x40b96a          10  # 0x8d71e0
+L   0x40b96a         512  # 0x8d5380
+L   0x40b96a         860  # 0x8d7430
+L   0x40b96a         812  # 0x8d7ad0
+L   0x40b96a         792  # 0x8d77a0
+L   0x40b96a           2  # 0x8d7320
+L   0x40b96a         256  # 0x8d8020
+L   0x40b96a        2048  # 0x8d8a40
+L   0x40b96a        2048  # 0x8d8230
+L   0x40b96a        2048  # 0x8d9a60
+L   0x40b96a        2048  # 0x8da270
+L   0x40b96a        4096  # 0x8e1590
+L   0x40b97f        9245  # 0x8e8720
+L   0x40b97f        8192  # 0x8e6710
+L   0x40b96a        4096  # 0x8e2f70
+L   0x40b96a        2048  # 0x8daa80
+L   0x40b96a        2048  # 0x8d9250
+L   0x40b96a         514  # 0x8d7e10
+# total allocation requests:     26 ; max. mem used 52 kBytes
+# leak  48403 Bytes	:-(
+WORK TIME - 00:00:27.14
