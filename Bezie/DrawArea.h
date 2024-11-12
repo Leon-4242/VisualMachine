@@ -3,11 +3,12 @@
 
 #include <QWidget>
 #include <QColor>
-#include "Bezie.h"
+#include "../../HSE_less_MSU/4_task/Bezie.h"
+
+const int MAX_POINTS = 100;
 
 class DrawArea: public QWidget {
     Q_OBJECT
-
 private:
     QColor bgColor; // Background color
     int xSize;      // Window width
@@ -18,11 +19,11 @@ private:
     double xCoeff, yCoeff;
 
     // Correspondence betwwen pixel and mathematical coord. systems
-    QPointF mapToPixels(const R2Point& p) const;
-    R2Point mapFromPixels(const QPointF& q) const;
+    QPointF mapToPixels(const Bezie::Point& p) const;
+    Bezie::Point mapFromPixels(const QPointF& q) const;
 
     // The array of points defined by mouse clicks
-    R2Point points[MAX_POINTS];
+    Bezie::Point points[MAX_POINTS];
     Qt::MouseButton pointButtons[MAX_POINTS];
     int numPoints;
 
@@ -31,14 +32,16 @@ DrawArea(QWidget *parent = 0);
 
 void initializeMap();
 
-void drawPoints(QPainter*);
-void clear();
-void onDraw();  // Called when a user presses the "Draw" button
+    void drawCoordSystem(QPainter*);
+    void drawPoints(QPainter*);
+    void clear();
+    void onDraw();  // Called when a user presses the "Draw" button
+    void drawBezie(QPainter*);
 
 protected:
-void paintEvent(QPaintEvent *event);
-void mouseReleaseEvent(QMouseEvent* event);
-void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event);
+    void mouseReleaseEvent(QMouseEvent* event);
+    void resizeEvent(QResizeEvent *event);
 };
 
 #endif // DRAWAREA_H

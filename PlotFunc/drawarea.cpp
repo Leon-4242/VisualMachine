@@ -81,7 +81,7 @@ void DrawArea::initializeMap() {
     yCoeff = double(h)/dy;
 }
 
-QPointF DrawArea::mapToPixels(const R2Point& p) const {
+QPointF DrawArea::mapToPixels(const R2Point &p) const {
     return QPointF(
         (p.x - xmin)*xCoeff,
         (ymax - p.y)*yCoeff

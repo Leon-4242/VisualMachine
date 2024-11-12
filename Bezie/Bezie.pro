@@ -11,17 +11,9 @@ CONFIG += c++17
 TARGET = Func
 TEMPLATE = app
 
-SOURCES += \
-    ../../HSE_less_MSU/4_task/Bezie.cpp \
-    DrawArea.cpp \
-    main.cpp \
-    mainwindow.cpp
+SOURCES += main.cpp mainwindow.cpp ../../HSE_less_MSU/4_task/Bezie.cpp ../../HSE_less_MSU/4_task/R2Geometry.cpp DrawArea.cpp
 
-HEADERS += \
-    ../../HSE_less_MSU/4_task/Bezie.h \
-    ../../HSE_less_MSU/4_task/R2Geometry.h \
-    DrawArea.h \
-    mainwindow.h
+HEADERS += mainwindow.h DrawArea.h ../../HSE_less_MSU/4_task/Bezie.h
 
 FORMS += \
     mainwindow.ui

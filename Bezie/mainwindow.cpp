@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <locale.h>
 
 MainWindow* mainWindow = 0;
 DrawArea* drawArea = 0;
@@ -31,8 +32,8 @@ void MainWindow::on_closeButton_clicked()
 
 void MainWindow::on_drawButton_clicked()
 {
-    // Here you can add any code that
-    // changes the drawing model (for instance, after
-    // adding a number of points by mouse clicks).
+    drawArea->drawBezie();
     drawArea->onDraw();
 }
+
+
