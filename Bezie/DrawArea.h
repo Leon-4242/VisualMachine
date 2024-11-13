@@ -3,9 +3,8 @@
 
 #include <QWidget>
 #include <QColor>
+#include <vector>
 #include "../../HSE_less_MSU/4_task/Bezie.h"
-
-const int MAX_POINTS = 100;
 
 class DrawArea: public QWidget {
     Q_OBJECT
@@ -23,9 +22,9 @@ private:
     Bezie::Point mapFromPixels(const QPointF& q) const;
 
     // The array of points defined by mouse clicks
-    Bezie::Point points[MAX_POINTS];
-    Qt::MouseButton pointButtons[MAX_POINTS];
-    int numPoints;
+    std::vector<Bezie::Point> points;
+    std::vector<Qt::MouseButton> pointButtons;
+    bool DRAW;
 
 public:
 DrawArea(QWidget *parent = 0);

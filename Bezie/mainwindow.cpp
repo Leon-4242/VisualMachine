@@ -32,7 +32,6 @@ void MainWindow::on_closeButton_clicked()
 
 void MainWindow::on_drawButton_clicked()
 {
-    drawArea->drawBezie();
     drawArea->onDraw();
 }
 

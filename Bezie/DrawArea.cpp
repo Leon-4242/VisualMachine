@@ -14,7 +14,7 @@ DrawArea::DrawArea(QWidget *parent):
     ymax(6.),
     xCoeff(50.),        // == 800./(xmax-xmin)
     yCoeff(50.),        // == 600./(ymax-ymin)
-    numPoints(0)
+    DRAW(false)
 {
     setAttribute(Qt::WA_StaticContents); // for optimizing painting events
     drawArea = this;
@@ -28,6 +28,9 @@ void DrawArea::paintEvent(QPaintEvent* event)
     drawCoordSystem(&painter);
     painter.setRenderHint(QPainter::Antialiasing);
     drawPoints(&painter);
+    if (DRAW) {
+        drawBezie(&painter);
+    }
 
     event->accept();
 }
@@ -50,24 +53,21 @@ void DrawArea::resizeEvent(QResizeEvent* event) {
 }
 
 void DrawArea::clear() {
-    numPoints = 0;
+    points.clear();
+    DRAW = false;
     update();
 }
 
 void DrawArea::onDraw() {
+    if (points.empty()) return;
+    DRAW = true;
     update();   // Redraw the picture in window
 }
 
 
 void DrawArea::mouseReleaseEvent(QMouseEvent* event) {
-    if (numPoints >= MAX_POINTS)
-        return;
-
-    pointButtons[numPoints] = event->button();
-    Bezie::Point p = mapFromPixels(event->pos());
-    points[numPoints] = p;
-    ++numPoints;
-
+    pointButtons.push_back(event->button());
+    points.push_back(mapFromPixels(event->pos()));
     event->accept();
     update();
 }
@@ -84,7 +84,7 @@ void DrawArea::drawPoints(QPainter* painter) {
 
     QPointF dx(8., 0.);
     QPointF dy(0., 8.);
-    for (int i = 0; i < numPoints; ++i) {
+    for (size_t i = 0; i < points.size(); ++i) {
         if (pointButtons[i] == Qt::LeftButton)
             painter->setPen(bluePen);
         else if (pointButtons[i] == Qt::RightButton)
@@ -192,14 +192,16 @@ void DrawArea::drawBezie(QPainter* painter) {
     painter->setBrush(Qt::NoBrush);
 
     QPainterPath path;
-
-    double dt = 1e-11;
+    Bezie::Point h0, h1;
+    h0 = mapFromPixels(QPointF(0., 0.));
+    h1 = mapFromPixels(QPointF(1., 0.));
+    double dt = h1.X() - h0.X();
     double t = 0.;
-    Bezie::Point p = Bezie::BezieLine(points, 0, numPoints-1, t);
+    Bezie::Point p = Bezie::BezieLine(points, 0, points.size()-1, t);
     path.moveTo(mapToPixels(p));
     while (t < 1.) {
         t += dt;
-        p = Bezie::BezieLine(points, 0, numPoints-1, t);
+        p = Bezie::BezieLine(points, 0, points.size()-1, t);
         path.lineTo(mapToPixels(p));
     }
     painter->drawPath(path);
