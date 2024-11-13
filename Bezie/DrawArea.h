@@ -25,6 +25,7 @@ private:
     std::vector<Bezie::Point> points;
     std::vector<Qt::MouseButton> pointButtons;
     bool DRAW;
+    int move;
 
 public:
 DrawArea(QWidget *parent = 0);
@@ -36,10 +37,13 @@ void initializeMap();
     void clear();
     void onDraw();  // Called when a user presses the "Draw" button
     void drawBezie(QPainter*);
+    int searchNode(const Bezie::Point& p) const;
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void mouseReleaseEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void resizeEvent(QResizeEvent *event);
 };
 

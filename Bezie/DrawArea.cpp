@@ -14,7 +14,8 @@ DrawArea::DrawArea(QWidget *parent):
     ymax(6.),
     xCoeff(50.),        // == 800./(xmax-xmin)
     yCoeff(50.),        // == 600./(ymax-ymin)
-    DRAW(false)
+    DRAW(false),
+    move(-1)
 {
     setAttribute(Qt::WA_StaticContents); // for optimizing painting events
     drawArea = this;
@@ -54,7 +55,9 @@ void DrawArea::resizeEvent(QResizeEvent* event) {
 
 void DrawArea::clear() {
     points.clear();
+    pointButtons.clear();
     DRAW = false;
+    move = -1;
     update();
 }
 
@@ -64,12 +67,18 @@ void DrawArea::onDraw() {
     update();   // Redraw the picture in window
 }
 
-
 void DrawArea::mouseReleaseEvent(QMouseEvent* event) {
-    pointButtons.push_back(event->button());
-    points.push_back(mapFromPixels(event->pos()));
-    event->accept();
-    update();
+    QPointF q = event->pos();
+    Bezie::Point p = mapFromPixels(q);
+    if (move >= 0) {
+        move = (-1);
+        setCursor(Qt::ArrowCursor);
+    } else {
+        // Add a new node
+        points.push_back(p);
+        pointButtons.push_back(event->button());
+        update();
+    }
 }
 
 void DrawArea::drawPoints(QPainter* painter) {
@@ -207,3 +216,38 @@ void DrawArea::drawBezie(QPainter* painter) {
     painter->drawPath(path);
 }
 
+int DrawArea::searchNode(const Bezie::Point& p) const {
+    const double SEARCH_DIST = 0.1;
+    for (size_t i = 0; i < points.size(); ++i) {
+        if ((p-points[i]).mod() <= SEARCH_DIST)
+            return int(i);
+    }
+    return (-1);
+}
+
+void DrawArea::mousePressEvent(QMouseEvent *event) {
+    QPointF p = event->pos();
+    Bezie::Point t = mapFromPixels(p);
+    int idx = searchNode(t);
+    if (idx < 0)
+        return;
+    move = idx;
+    setCursor(Qt::ClosedHandCursor);
+}
+
+void DrawArea::mouseMoveEvent(QMouseEvent *event) {
+    QPointF p = event->pos();
+    Bezie::Point t = mapFromPixels(p);
+    if (move >= 0) {
+        Q_ASSERT(move < int(points.size()));
+        points[move] = t;
+        update();
+    } else {
+        int idx = searchNode(t);
+        if (idx < 0) {
+            setCursor(Qt::ArrowCursor);
+        } else {
+            setCursor(Qt::OpenHandCursor);
+        }
+    }
+}
